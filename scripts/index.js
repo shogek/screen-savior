@@ -3,6 +3,7 @@
     const {
         CHARACTERS,
         COLORS,
+        RaindropColumn,
     } = document.ScreenSavior
 
     function init() {
@@ -32,58 +33,23 @@
         context.textAlign = 'start'
         context.textBaseline = 'top'
 
-        context.fillStyle = COLORS.PURE
-        context.fillText('0', 0, 0)
-
-        context.fillStyle = COLORS.PURE
-        context.fillText('A', 0, 30)
-
-        context.fillStyle = COLORS.PURE
-        context.fillText('B', 0, 60)
-
-        context.fillStyle = COLORS.PURE
-        context.fillText('C', 0, 90)
-
-        context.fillStyle = COLORS.PURE
-        context.fillText('D', 0, 120)
-
-        context.fillStyle = COLORS.DARKER
-        context.fillText('F', 0, 150)
-
-        context.fillStyle = COLORS.DARK
-        context.fillText('G', 0, 180)
-
-        context.fillStyle = COLORS.MEDIUM
-        context.fillText('H', 0, 210)
-
-        context.fillStyle = COLORS.LIGHTER
-        context.fillText('J', 0, 240)
-
-        context.fillStyle = COLORS.LIGHTEST
-        context.fillText('K', 0, 270)
-
         const characterCount = CHARACTERS.length
 
         const x = 30
         let y = 0
         const verticalGap = 30
+        const horizontalGap = 30
 
-        const intervalId = setInterval(() => {
-            if (y >= canvas.height) {
-                clearInterval(intervalId)
-                return
-            }
-
-            const number = getRandomNumber(characterCount);
-            const character = CHARACTERS[number]
-
-            console.log(number)
-
-            context.fillStyle = COLORS.LIGHTEST
-            context.fillText(character, x, y)
-
-            y += verticalGap
-        }, 100)
+        const canvasWidth = canvas.width
+        const characterWidth = 30
+        const columnCount = Math.floor(canvasWidth / 30)
+        for (let i = 0; i < columnCount; i++) {
+            const randomTimeout = getRandomNumber(5000)
+            setTimeout(() => {
+                const raindropColumn = new RaindropColumn(i * horizontalGap)
+                raindropColumn.draw(canvas)
+            }, randomTimeout)
+        }
     }
 
     init()

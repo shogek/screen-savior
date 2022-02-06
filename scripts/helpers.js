@@ -19,8 +19,17 @@ document.ScreenSavior.helpers = (() => {
         }
     }
 
+    /**
+     * TODO: Explain me
+     * @param {number} max TODO: Explain me 
+     */
+    function getRandomNumber(max) {
+        return Math.floor(Math.random() * max);
+    }
+
     return {
         assert,
+        getRandomNumber,
     }
 
 })()
