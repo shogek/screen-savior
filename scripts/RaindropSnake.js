@@ -10,8 +10,8 @@ document.ScreenSavior.RaindropSnake = (() => {
     }
   } = document.ScreenSavior
 
+  /** I repesent a single vertical column in the matrix rain. */
   return class RaindropSnake {
-
     #startingXCoord = NaN
     #maxYCoord = NaN
     #verticalGap = NaN
@@ -70,6 +70,14 @@ document.ScreenSavior.RaindropSnake = (() => {
     }
 
     #updateCharacter(raindrop) {
+      const isTrue =
+        raindrop.color === COLORS.LIGHTER5
+        || raindrop.color === COLORS.LIGHTER4
+        || raindrop.color === COLORS.LIGHTER3
+      if (isTrue) {
+        return
+      }
+
       const randomNumber = getRandomNumber(100)
       // TODO: Move hardcoded value to config
       if (randomNumber < 95) {
@@ -81,14 +89,43 @@ document.ScreenSavior.RaindropSnake = (() => {
     }
 
     #clearRaindrop(raindrop, context) {
+        context.shadowColor = COLORS.DARKER5; // string
+        // Horizontal distance of the shadow, in relation to the text.
+        context.shadowOffsetX = 0; // integer
+        // Vertical distance of the shadow, in relation to the text.
+        context.shadowOffsetY = 0; // integer
+        // Blurring effect to the shadow, the larger the value, the greater the blur.
+        context.shadowBlur = 5; // integer
+
       // TODO: Remove these hardcoded values
       context.fillStyle = COLORS.DARKER5
       context.fillRect(raindrop.xCoord, raindrop.yCoord, 30, 30)
     }
 
     #redrawRaindrop(raindrop, context) {
+      const isTrue =
+        raindrop.color === COLORS.LIGHTER5
+        || raindrop.color === COLORS.LIGHTER4
+        || raindrop.color === COLORS.LIGHTER3
+      
+      if (isTrue) {
+        // Color of the shadow;  RGB, RGBA, HSL, HEX, and other inputs are valid.
+        context.shadowColor = raindrop.color; // string
+        // Horizontal distance of the shadow, in relation to the text.
+        context.shadowOffsetX = 0; // integer
+        // Vertical distance of the shadow, in relation to the text.
+        context.shadowOffsetY = 0; // integer
+        // Blurring effect to the shadow, the larger the value, the greater the blur.
+        context.shadowBlur = 5; // integer
+      }
+
       context.fillStyle = raindrop.color
       context.fillText(raindrop.character, raindrop.xCoord, raindrop.yCoord)
+
+      if (isTrue) {
+        context.shadowColor = "black"
+        context.shadowBlur = 0; // integer
+      }
     }
 
     #getUpdatedRaindropColor(raindrop) {
