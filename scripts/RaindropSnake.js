@@ -3,6 +3,7 @@ document.ScreenSavior.RaindropSnake = (() => {
   const {
     COLORS,
     CHARACTERS,
+    SETTINGS,
     Raindrop,
     helpers: {
       assert,
@@ -56,8 +57,7 @@ document.ScreenSavior.RaindropSnake = (() => {
         color: COLORS.LIGHTER5,
         xCoord: this.#startingXCoord,
         yCoord: yCoords,
-        // TODO: Get this value from configuration
-        lifetime: 10,
+        lifetime: SETTINGS.CHARACTERS.LIFETIME,
       })
 
       this.#raindrops.push(newRaindrop)
@@ -80,7 +80,7 @@ document.ScreenSavior.RaindropSnake = (() => {
 
       const randomNumber = getRandomNumber(100)
       // TODO: Move hardcoded value to config
-      if (randomNumber < 95) {
+      if (randomNumber < SETTINGS.CHARACTERS.RANDOMIZE_CHANCE) {
         return
       }
 

@@ -2,6 +2,7 @@
  
     const {
         RaindropSnake,
+        SETTINGS,
     } = document.ScreenSavior
 
     function init() {
@@ -27,18 +28,13 @@
 
     function drawScreenSaver(canvas) {
         const context = canvas.getContext('2d');
-        context.font = '30px monospace'
+        context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
         context.textAlign = 'start'
         context.textBaseline = 'top'
 
-        // TODO: Move values to config
-        const x = 30
-        let y = 0
-        const verticalGap = 30
-        const horizontalGap = 30
+        const horizontalGap = SETTINGS.CHARACTERS.HORIZONTAL_GAP
 
         const canvasWidth = canvas.width
-        const characterWidth = 30
         const columnCount = Math.floor(canvasWidth / 30)
 
         const raindropSnakes = []
@@ -47,7 +43,7 @@
             const raindropSnake = new RaindropSnake({
                 startingXCoord: i * horizontalGap,
                 maxYCoord: canvas.height,
-                verticalGap: 30,
+                verticalGap: SETTINGS.CHARACTERS.VERTICAL_GAP,
             })
             raindropSnakes.push(raindropSnake)
         }
