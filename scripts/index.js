@@ -1,9 +1,7 @@
 (() => {
  
     const {
-        CHARACTERS,
-        COLORS,
-        RaindropColumn,
+        RaindropSnake,
     } = document.ScreenSavior
 
     function init() {
@@ -33,8 +31,7 @@
         context.textAlign = 'start'
         context.textBaseline = 'top'
 
-        const characterCount = CHARACTERS.length
-
+        // TODO: Move values to config
         const x = 30
         let y = 0
         const verticalGap = 30
@@ -43,12 +40,34 @@
         const canvasWidth = canvas.width
         const characterWidth = 30
         const columnCount = Math.floor(canvasWidth / 30)
+
+        const raindropSnakes = []
+
         for (let i = 0; i < columnCount; i++) {
+            const raindropSnake = new RaindropSnake({
+                startingXCoord: i * horizontalGap,
+                maxYCoord: canvas.height,
+                verticalGap: 30,
+            })
+            raindropSnakes.push(raindropSnake)
+        }
+
+        for (let i = 0; i < raindropSnakes.length; i++) {
             const randomTimeout = getRandomNumber(5000)
-            setTimeout(() => {
-                const raindropColumn = new RaindropColumn(i * horizontalGap)
-                raindropColumn.draw(canvas)
-            }, randomTimeout)
+            setTimeout(
+                (i) => {
+                    setInterval(
+                        () => {
+                            const raindropSnake = raindropSnakes[i]
+                            raindropSnake.update(context)
+                        },
+                        100
+                    )
+                    
+                },
+                randomTimeout,
+                i
+            )
         }
     }
 

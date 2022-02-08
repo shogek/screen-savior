@@ -3,26 +3,23 @@ document.ScreenSavior.COLORS = (() => {
     /* https://cssgradient.io/ */
     return {
         /** Pure white */
-        'LIGHTEST': '#ffffff',
+        LIGHTER5: '#ffffff',
         
-        'LIGHTER5': '#ffffff',
-        'LIGHTER4': '#bad6ba',
-        'LIGHTER3': '#7cb07c',
-        'LIGHTER2': '#4d934d',
-        'LIGHTER1': '#197319',
+        LIGHTER4: '#6ea66e',
+        LIGHTER3: '#4a904a',
+        LIGHTER2: '#247924',
+        LIGHTER1: '#197319',
         
         /** The matrix green */
-        'PURE': '#006300',
+        PURE: '#006300',
         
-        // TODO: Enter appropriate values
-        'DARKER1': '#ffffff',
-        'DARKER2': '#bad6ba',
-        'DARKER3': '#7cb07c',
-        'DARKER4': '#4d934d',
-        'DARKER5': '#197319',
+        DARKER1: '#005300',
+        DARKER2: '#004000',
+        DARKER3: '#002d00',
+        DARKER4: '#001700',
 
         /** Pure black */
-        'DARKEST': '#000000'
+        DARKER5: '#000000'
     }
 
 })()
