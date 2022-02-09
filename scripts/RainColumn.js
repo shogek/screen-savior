@@ -1,4 +1,4 @@
-document.ScreenSavior.RaindropSnake = (() => {
+document.ScreenSavior.RainColumn = (() => {
 
   const {
     COLORS,
@@ -13,9 +13,8 @@ document.ScreenSavior.RaindropSnake = (() => {
   } = document.ScreenSavior
 
   /** I repesent a single vertical column in the matrix rain. */
-  return class RaindropSnake {
+  return class RainColumn {
     #startingXCoord = NaN
-    #currentYCoord = NaN
     #maxYCoord = NaN
     #verticalGap = NaN
     #raindrops = []
@@ -31,7 +30,6 @@ document.ScreenSavior.RaindropSnake = (() => {
       assert({ value: verticalGap, type: 'number', isRequired: true })
 
       this.#startingXCoord = startingXCoord
-      this.#currentYCoord = 0
       this.#maxYCoord = maxYCoord
       this.#verticalGap = verticalGap
     }
@@ -59,25 +57,28 @@ document.ScreenSavior.RaindropSnake = (() => {
         this.#redrawRaindrop(raindrop, context)
       }
 
-      if (this.#currentYCoord >= this.#maxYCoord) {
-        this.#currentYCoord = 0
+      const latestRaindrop = this.#raindrops.length > 0
+        ? this.#raindrops[this.#raindrops.length - 1]
+        : null
+
+      const yCoordForNextRaindrop = latestRaindrop === null
+        ? SETTINGS.RAIN.PADDING_TOP
+        : latestRaindrop.yCoord + SETTINGS.CHARACTERS.FONT_SIZE + this.#verticalGap
+
+      if (yCoordForNextRaindrop >= this.#maxYCoord) {
         this.#raindrops = this.#raindrops.filter(x => x.state !== RAINDROP_STATES.DEAD)
         return
       }
 
-      const randomCharacter = CHARACTERS[getRandomNumber(CHARACTERS.length)]
-
       const newRaindrop = new Raindrop({
-        character: randomCharacter,
+        character: CHARACTERS[getRandomNumber(CHARACTERS.length)],
         color: COLORS.LIGHTER5,
         glowIntensity: SETTINGS.CHARACTERS.GLOW_INTENSITY,
         xCoord: this.#startingXCoord,
-        yCoord: this.#currentYCoord,
+        yCoord: yCoordForNextRaindrop,
         state: RAINDROP_STATES.APPEARING,
         lifetime: SETTINGS.CHARACTERS.LIFETIME,
       })
-
-      this.#currentYCoord += SETTINGS.CHARACTERS.FONT_SIZE + this.#verticalGap
 
       this.#raindrops.push(newRaindrop)
       this.#redrawRaindrop(newRaindrop, context)
@@ -110,7 +111,6 @@ document.ScreenSavior.RaindropSnake = (() => {
     #clearRaindrop(raindrop, context) {
       context.shadowColor = COLORS.DARKER5
       context.shadowBlur = 0
-
       context.fillStyle = COLORS.DARKER5
 
       const fontSize = SETTINGS.CHARACTERS.FONT_SIZE

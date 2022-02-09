@@ -7,7 +7,7 @@ document.ScreenSavior.Raindrop = (() => {
         },
     } = document.ScreenSavior
 
-    /** Represents a single character in the matrix rain. */
+    /** I represent a single character in a rain column. */
     return class Raindrop {
         #character = ''
         #color = ''
@@ -24,7 +24,7 @@ document.ScreenSavior.Raindrop = (() => {
          * @param {number} xCoord - The X axis coordinate where it should be drawn.
          * @param {number} yCoord - The Y axis coordinate where it should be drawn.
          * @param {RAINDROP_STATES} raindropState - The state of the raindrop.
-         * @param {number} lifetime - The lifetime in loops before it can start fading out.
+         * @param {number} lifetime - The amount of redraws the raindrop should wait before it starts to fade out.
          */
         constructor({ character, color, glowIntensity, xCoord, yCoord, state, lifetime }) {
             assert({ value: character, type: 'string', isRequired: true })
@@ -44,24 +44,85 @@ document.ScreenSavior.Raindrop = (() => {
             this.#lifetime = lifetime
         }
 
-        get character() { return this.#character }
-        setCharacter(character) { this.#character = character }
+        /**
+         * @returns {string} The text character that it represents on the screen, ex.: 'A'.
+         */
+        get character() {
+            return this.#character
+        
+        }
+        /**
+         * @param {string} character - The text character that it represents on the screen, ex.: 'A'.
+         */
+        setCharacter(character) {
+            this.#character = character
+        }
 
-        get color() { return this.#color }
-        setColor(color) { this.#color = color }
+        /**
+         * @returns {string} The color of the text character as it will be shown on the screen, ex.: '#FFFFFF'.
+         */
+        get color() {
+            return this.#color
+        }
+        /**
+         * @param {string} color - The color of the text character as it will be shown on the screen, ex.: '#FFFFFF'.
+         */
+        setColor(color) {
+            this.#color = color
+        }
 
-        get glowIntensity() { return this.#glowIntensity }
-        setGlowIntensity(glowIntensity) { this.#glowIntensity = glowIntensity }
+        /**
+         * @returns {number} The intensity of the character's glow.
+         */
+        get glowIntensity() {
+            return this.#glowIntensity
+        }
+        /**
+         * @param {string} glowIntensity - The intensity of the character's glow.
+         */
+        setGlowIntensity(glowIntensity) {
+            this.#glowIntensity = glowIntensity
+        }
 
-        get xCoord() { return this.#xCoord }
+        /**
+         * @returns {number} The X axis coordinate where it should be drawn.
+         */
+        get xCoord() {
+            return this.#xCoord
+        }
 
-        get yCoord() { return this.#yCoord }
-        setYCoord(yCoord) { this.#yCoord = yCoord }
+        /**
+         * @returns {number} The Y axis coordinate where it should be drawn.
+         */
+        get yCoord() {
+            return this.#yCoord
+        }
+        /**
+         * @param {number} yCoord - The Y axis coordinate where it should be drawn.
+         */
+        setYCoord(yCoord) {
+            this.#yCoord = yCoord
+        }
 
-        get state() { return this.#state }
-        setState(raindropState) { this.#state = raindropState }
+        /**
+         * @returns {RAINDROP_STATES} The state of the raindrop.
+         */
+        get state() {
+            return this.#state
+        }
+        /**
+         * @param {RAINDROP_STATES} raindropState - The state of the raindrop.
+         */
+        setState(raindropState) {
+            this.#state = raindropState
+        }
 
-        get lifetime() { return this.#lifetime }
+        /**
+         * @returns {number} The amount of redraws the raindrop should wait before it starts to fade out.
+         */
+        get lifetime() {
+            return this.#lifetime
+        }
 
         decreaseLifetime() {
             this.#lifetime -= 1

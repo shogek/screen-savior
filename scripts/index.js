@@ -1,70 +1,81 @@
 (() => {
  
     const {
-        RaindropSnake,
         SETTINGS,
+        RainColumn,
+        helpers: {
+            getRandomNumber,
+        }
     } = document.ScreenSavior
 
     function init() {
         const canvas = document.getElementById('canvas')
+        const context = canvas.getContext('2d')
     
-        resizeCanvas(canvas)
-        drawScreenSaver(canvas)
-        
-        window.addEventListener('resize', () => {
-            resizeCanvas(canvas)
-            drawScreenSaver(canvas)
-        })
+        resizeCanvas(context)
+        configureCanvasFont(context)
+        drawScreenSaver(context)
     }
 
-    function resizeCanvas(canvas) {
+    /**
+     * @param {CanvasRenderingContext2D} context - The canvas context.
+     */
+    function configureCanvasFont(context) {
+        context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
+        context.textAlign = 'start'
+        context.textBaseline = 'top'
+    }
+
+    /**
+     * @param {CanvasRenderingContext2D} context - The canvas context.
+     */
+    function resizeCanvas(context) {
+        const canvas = context.canvas
         canvas.width = window.innerWidth
         canvas.height = window.innerHeight
     }
 
-    function getRandomNumber(max) {
-        return Math.floor(Math.random() * max);
+    /**
+     * @param {CanvasRenderingContext2D} context - The canvas context.
+     */
+    function drawScreenSaver(context) {
+        const verticalGap = SETTINGS.CHARACTERS.VERTICAL_GAP
+        const horizontalGap = SETTINGS.CHARACTERS.HORIZONTAL_GAP
+        const paddingLeft = SETTINGS.RAIN.PADDING_LEFT
+
+        const columnCount = Math.floor(canvas.width / 30)
+
+        // Initialize the rain columns
+        for (let i = 0; i < columnCount; i++) {
+            const rainColumn = new RainColumn({
+                startingXCoord: i * horizontalGap + paddingLeft,
+                maxYCoord: canvas.height,
+                verticalGap: verticalGap,
+            })
+
+            initializeRainColumn({
+                rainColumn: rainColumn,
+                context: context,
+            })
+        }
     }
 
-    function drawScreenSaver(canvas) {
-        const context = canvas.getContext('2d');
-        context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
-        context.textAlign = 'start'
-        context.textBaseline = 'top'
-
-        const horizontalGap = SETTINGS.CHARACTERS.HORIZONTAL_GAP
-
-        const canvasWidth = canvas.width
-        const columnCount = Math.floor(canvasWidth / 30)
-
-        const raindropSnakes = []
-
-        for (let i = 0; i < columnCount; i++) {
-            const raindropSnake = new RaindropSnake({
-                startingXCoord: i * horizontalGap,
-                maxYCoord: canvas.height,
-                verticalGap: SETTINGS.CHARACTERS.VERTICAL_GAP,
-            })
-            raindropSnakes.push(raindropSnake)
-        }
-
-        for (let i = 0; i < raindropSnakes.length; i++) {
-            const randomTimeout = getRandomNumber(2000)
-            setTimeout(
-                (i) => {
-                    setInterval(
-                        () => {
-                            const raindropSnake = raindropSnakes[i]
-                            raindropSnake.update(context)
-                        },
-                        100
-                    )
-                    
-                },
-                randomTimeout,
-                i
-            )
-        }
+    /**
+     * After a timeout, start the rain column and update it periodically 
+     * @param {RainColumn} rainColumn 
+     * @param {CanvasRenderingContext2D} context 
+     */
+    function initializeRainColumn({ rainColumn, context }) {
+        const randomTimeout = getRandomNumber(SETTINGS.RAIN.RANDOMIZE_START)
+        
+        setTimeout(() => {
+            setInterval(
+                    () => rainColumn.update(context),
+                    SETTINGS.REFRESH_TIME
+                )
+            },
+            randomTimeout,
+        )
     }
 
     init()
