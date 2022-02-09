@@ -4,6 +4,7 @@ document.ScreenSavior.RaindropSnake = (() => {
     COLORS,
     CHARACTERS,
     SETTINGS,
+    RAINDROP_STATES,
     Raindrop,
     helpers: {
       assert,
@@ -42,44 +43,59 @@ document.ScreenSavior.RaindropSnake = (() => {
       for (let i = this.#raindrops.length - 1; i >= 0; i--) {
         const raindrop = this.#raindrops[i]
 
-        this.#updateRaindropColor(raindrop)
+        raindrop.decreaseLifetime()
         this.#clearRaindrop(raindrop, context)
-        this.#updateCharacter(raindrop)
+        this.#updateRaindropColorAndState(raindrop)
+        this.#tryRandomizeCharacter(raindrop)
         this.#redrawRaindrop(raindrop, context)
       }
 
-      // TODO: Fix the snake going beyond the visible screen
-      const randomCharacter = CHARACTERS[getRandomNumber(CHARACTERS.length)]
+      if (this.#raindrops.length > 0) {
+        const oldestRaindrop = this.#raindrops[this.#raindrops.length - 1]
+        if (oldestRaindrop.state === RAINDROP_STATES.DEAD) {
+          this.#raindrops.shift()
+        }
+      }
+
       const yCoords = this.#raindrops.length * this.#verticalGap
+      if (yCoords >= this.#maxYCoord) {
+        return
+      }
+
+      const randomCharacter = CHARACTERS[getRandomNumber(CHARACTERS.length)]
 
       const newRaindrop = new Raindrop({
         character: randomCharacter,
         color: COLORS.LIGHTER5,
+        glowIntensity: SETTINGS.CHARACTERS.GLOW_INTENSITY,
         xCoord: this.#startingXCoord,
         yCoord: yCoords,
+        state: RAINDROP_STATES.APPEARING,
         lifetime: SETTINGS.CHARACTERS.LIFETIME,
       })
 
       this.#raindrops.push(newRaindrop)
       this.#redrawRaindrop(newRaindrop, context)
+      context.shadowColor = COLORS.DARKER5
+      context.shadowBlur = 0
     }
 
-    #updateRaindropColor(raindrop) {
-      const updatedColor = this.#getUpdatedRaindropColor(raindrop)
+    #updateRaindropColorAndState(raindrop) {
+      const [updatedColor, updatedState] = this.#getUpdatedRaindropColorAndState(raindrop)
       raindrop.setColor(updatedColor)
+      raindrop.setState(updatedState)
+
+      if (updatedState !== RAINDROP_STATES.APPEARING) {
+        raindrop.setGlowIntensity(0)
+      }
     }
 
-    #updateCharacter(raindrop) {
-      const isTrue =
-        raindrop.color === COLORS.LIGHTER5
-        || raindrop.color === COLORS.LIGHTER4
-        || raindrop.color === COLORS.LIGHTER3
-      if (isTrue) {
+    #tryRandomizeCharacter(raindrop) {
+      if (raindrop.state === RAINDROP_STATES.APPEARING) {
         return
       }
 
       const randomNumber = getRandomNumber(100)
-      // TODO: Move hardcoded value to config
       if (randomNumber < SETTINGS.CHARACTERS.RANDOMIZE_CHANCE) {
         return
       }
@@ -89,66 +105,50 @@ document.ScreenSavior.RaindropSnake = (() => {
     }
 
     #clearRaindrop(raindrop, context) {
-        context.shadowColor = COLORS.DARKER5; // string
-        // Horizontal distance of the shadow, in relation to the text.
-        context.shadowOffsetX = 0; // integer
-        // Vertical distance of the shadow, in relation to the text.
-        context.shadowOffsetY = 0; // integer
-        // Blurring effect to the shadow, the larger the value, the greater the blur.
-        context.shadowBlur = 5; // integer
+      context.shadowColor = COLORS.DARKER5
+      context.shadowBlur = 0
 
-      // TODO: Remove these hardcoded values
       context.fillStyle = COLORS.DARKER5
-      context.fillRect(raindrop.xCoord, raindrop.yCoord, 30, 30)
+
+      const fontSize = SETTINGS.CHARACTERS.FONT_SIZE
+      const glowIntensity = SETTINGS.CHARACTERS.GLOW_INTENSITY
+      context.fillRect(
+        raindrop.xCoord - glowIntensity,
+        raindrop.yCoord - glowIntensity,
+        fontSize + glowIntensity + 1,
+        fontSize + glowIntensity + 1
+      )
     }
 
     #redrawRaindrop(raindrop, context) {
-      const isTrue =
-        raindrop.color === COLORS.LIGHTER5
-        || raindrop.color === COLORS.LIGHTER4
-        || raindrop.color === COLORS.LIGHTER3
-      
-      if (isTrue) {
-        // Color of the shadow;  RGB, RGBA, HSL, HEX, and other inputs are valid.
-        context.shadowColor = raindrop.color; // string
-        // Horizontal distance of the shadow, in relation to the text.
-        context.shadowOffsetX = 0; // integer
-        // Vertical distance of the shadow, in relation to the text.
-        context.shadowOffsetY = 0; // integer
-        // Blurring effect to the shadow, the larger the value, the greater the blur.
-        context.shadowBlur = 5; // integer
-      }
-
+      context.shadowColor = raindrop.color
+      context.shadowBlur = raindrop.glowIntensity
       context.fillStyle = raindrop.color
       context.fillText(raindrop.character, raindrop.xCoord, raindrop.yCoord)
 
-      if (isTrue) {
-        context.shadowColor = "black"
-        context.shadowBlur = 0; // integer
-      }
+      context.shadowColor = COLORS.DARKER5
+      context.shadowBlur = 0
     }
 
-    #getUpdatedRaindropColor(raindrop) {
+    // TODO: Come up with a better name
+    #getUpdatedRaindropColorAndState(raindrop) {
       switch (raindrop.color) {
-        case COLORS.LIGHTER5: return COLORS.LIGHTER4
-        case COLORS.LIGHTER4: return COLORS.LIGHTER3
-        case COLORS.LIGHTER3: return COLORS.LIGHTER2
-        case COLORS.LIGHTER2: return COLORS.LIGHTER1
-        case COLORS.LIGHTER1: return COLORS.PURE
+        case COLORS.LIGHTER5: return [COLORS.LIGHTER4, RAINDROP_STATES.APPEARING]
+        case COLORS.LIGHTER4: return [COLORS.LIGHTER3, RAINDROP_STATES.APPEARING]
+        case COLORS.LIGHTER3: return [COLORS.LIGHTER2, RAINDROP_STATES.APPEARING]
+        case COLORS.LIGHTER2: return [COLORS.LIGHTER1, RAINDROP_STATES.APPEARING]
+        case COLORS.LIGHTER1: return [COLORS.PURE, RAINDROP_STATES.LIVING]
 
         case COLORS.PURE:
-          if (raindrop.lifetime < 1) {
-            return COLORS.DARKER1
-          }
+          return raindrop.lifetime > 0
+            ? [COLORS.PURE, RAINDROP_STATES.LIVING]
+            : [COLORS.DARKER1, RAINDROP_STATES.DISAPPEARING]
 
-          raindrop.decreaseLifetime()
-          return COLORS.PURE
-
-        case COLORS.DARKER1: return COLORS.DARKER2
-        case COLORS.DARKER2: return COLORS.DARKER3
-        case COLORS.DARKER3: return COLORS.DARKER4
-        case COLORS.DARKER4: return COLORS.DARKER5
-        case COLORS.DARKER5: return COLORS.DARKER5
+        case COLORS.DARKER1: return [COLORS.DARKER2, RAINDROP_STATES.DISAPPEARING]
+        case COLORS.DARKER2: return [COLORS.DARKER3, RAINDROP_STATES.DISAPPEARING]
+        case COLORS.DARKER3: return [COLORS.DARKER4, RAINDROP_STATES.DISAPPEARING]
+        case COLORS.DARKER4: return [COLORS.DARKER5, RAINDROP_STATES.DISAPPEARING]
+        case COLORS.DARKER5: return [COLORS.DARKER5, RAINDROP_STATES.DEAD]
 
         default:
           debugger

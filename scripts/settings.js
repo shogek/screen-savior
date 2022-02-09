@@ -12,6 +12,8 @@ document.ScreenSavior.SETTINGS = (() => {
       LIFETIME: 10,
       /** The chance for a character to be substituted with another one (0-100). */
       RANDOMIZE_CHANCE: 95,
+      /** Add a glow to the most recent characters (0-100). */
+      GLOW_INTENSITY: 5,
     }
   }
 

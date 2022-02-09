@@ -49,7 +49,7 @@
         }
 
         for (let i = 0; i < raindropSnakes.length; i++) {
-            const randomTimeout = getRandomNumber(5000)
+            const randomTimeout = getRandomNumber(4000)
             setTimeout(
                 (i) => {
                     setInterval(
