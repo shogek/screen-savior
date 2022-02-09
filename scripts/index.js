@@ -53,10 +53,7 @@
                 verticalGap: verticalGap,
             })
 
-            initializeRainColumn({
-                rainColumn: rainColumn,
-                context: context,
-            })
+            initializeRainColumn({ rainColumn, context })
         }
     }
 

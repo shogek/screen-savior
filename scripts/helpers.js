@@ -25,7 +25,7 @@ document.ScreenSavior.helpers = (() => {
      * @returns {number} Random number.
      */
     function getRandomNumber(max) {
-        return Math.floor(Math.random() * max);
+        return Math.floor(Math.random() * max)
     }
 
     return {

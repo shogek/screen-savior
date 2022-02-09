@@ -37,24 +37,17 @@ document.ScreenSavior.RainColumn = (() => {
     /**
      * Crawl the snake lower.
      * @param {CanvasRenderingContext2D} context Canvas context
-     * @returns void
+     * @returns {void}
      */
     update(context) {
       for (let i = this.#raindrops.length - 1; i >= 0; i--) {
-        const raindrop = this.#raindrops[i]
+        const raindrop = this.#raindrops[i]        
 
-        if (raindrop.state === RAINDROP_STATES.LIVING) {
-          raindrop.decreaseLifetime()
-        }
-
-        if (raindrop.state === RAINDROP_STATES.DEAD) {
-          continue
-        }
-
+        this.#updateRaindropLifetime(raindrop)
         this.#clearRaindrop(raindrop, context)
         this.#updateRaindropColorAndState(raindrop)
         this.#tryRandomizeCharacter(raindrop)
-        this.#redrawRaindrop(raindrop, context)
+        this.#drawRaindrop(raindrop, context)
       }
 
       const latestRaindrop = this.#raindrops.length > 0
@@ -81,9 +74,23 @@ document.ScreenSavior.RainColumn = (() => {
       })
 
       this.#raindrops.push(newRaindrop)
-      this.#redrawRaindrop(newRaindrop, context)
+      this.#drawRaindrop(newRaindrop, context)
     }
 
+    /**
+     * @param {Raindrop} raindrop
+     * @returns {void} 
+     */
+    #updateRaindropLifetime(raindrop) {
+      if (raindrop.state === RAINDROP_STATES.LIVING) {
+        raindrop.decreaseLifetime()
+      }
+    }
+
+    /**
+     * @param {Raindrop} raindrop
+     * @returns {void} 
+     */
     #updateRaindropColorAndState(raindrop) {
       const [updatedColor, updatedState] = this.#getUpdatedRaindropColorAndState(raindrop)
       raindrop.setColor(updatedColor)
@@ -94,6 +101,11 @@ document.ScreenSavior.RainColumn = (() => {
       }
     }
 
+    /**
+     * Change the raindrops displayed character if its lucky.
+     * @param {Raindrop} raindrop 
+     * @returns {void}
+     */
     #tryRandomizeCharacter(raindrop) {
       if (raindrop.state === RAINDROP_STATES.APPEARING) {
         return
@@ -108,6 +120,12 @@ document.ScreenSavior.RainColumn = (() => {
       raindrop.setCharacter(randomCharacter)
     }
 
+    /**
+     * Draw a black square in the place of the raindrop.
+     * @param {Raindrop} raindrop 
+     * @param {CanvasRenderingContext2D} context
+     * @returns {void} 
+     */
     #clearRaindrop(raindrop, context) {
       context.shadowColor = COLORS.DARKER5
       context.shadowBlur = 0
@@ -123,14 +141,23 @@ document.ScreenSavior.RainColumn = (() => {
       )
     }
 
-    #redrawRaindrop(raindrop, context) {
+    /**
+     * @param {Raindrop} raindrop 
+     * @param {CanvasRenderingContext2D} context
+     * @returns {void} 
+     */
+    #drawRaindrop(raindrop, context) {
       context.shadowColor = raindrop.color
       context.shadowBlur = raindrop.glowIntensity
       context.fillStyle = raindrop.color
       context.fillText(raindrop.character, raindrop.xCoord, raindrop.yCoord)
     }
 
-    // TODO: Come up with a better name
+    /**
+     * TODO: Come up with a better name
+     * @param {Raindrop} raindrop 
+     * @returns {[COLORS, RAINDROP_STATES]}
+     */
     #getUpdatedRaindropColorAndState(raindrop) {
       switch (raindrop.color) {
         case COLORS.LIGHTER5: return [COLORS.LIGHTER4, RAINDROP_STATES.APPEARING]
