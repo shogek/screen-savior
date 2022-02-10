@@ -12,32 +12,33 @@
         const canvas = document.getElementById('canvas')
         const context = canvas.getContext('2d')
     
-        resizeCanvas(context)
+        resizeCanvasToFitScreen(context)
         configureCanvasFont(context)
+        configureCanvasColors(context)
         drawScreenSaver(context)
     }
 
-    /**
-     * @param {CanvasRenderingContext2D} context - The canvas context.
-     */
+    function resizeCanvasToFitScreen(context) {
+        context.canvas.width = window.innerWidth
+        context.canvas.height = window.innerHeight
+    }
+
     function configureCanvasFont(context) {
         context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
         context.textAlign = 'start'
         context.textBaseline = 'top'
     }
 
-    /**
-     * @param {CanvasRenderingContext2D} context - The canvas context.
-     */
-    function resizeCanvas(context) {
-        const canvas = context.canvas
-        canvas.width = window.innerWidth
-        canvas.height = window.innerHeight
+    function configureCanvasColors(context) {
+        context.canvas.style.backgroundColor = SETTINGS.COLORS.DEAD
     }
 
-    /**
-     * @param {CanvasRenderingContext2D} context - The canvas context.
-     */
+    function configureCanvasFont(context) {
+        context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
+        context.textAlign = 'start'
+        context.textBaseline = 'top'
+    }
+
     function drawScreenSaver(context) {
         const verticalGap = SETTINGS.CHARACTERS.VERTICAL_GAP
         const horizontalGap = SETTINGS.CHARACTERS.HORIZONTAL_GAP

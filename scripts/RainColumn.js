@@ -1,9 +1,9 @@
 document.ScreenSavior.RainColumn = (() => {
 
   const {
-    COLORS,
     CHARACTERS,
     SETTINGS,
+    COLORS,
     RAINDROP_STATES,
     Raindrop,
     helpers: {
@@ -65,7 +65,7 @@ document.ScreenSavior.RainColumn = (() => {
 
       const newRaindrop = new Raindrop({
         character: CHARACTERS[getRandomNumber(CHARACTERS.length)],
-        color: COLORS.LIGHTER5,
+        color: COLORS.NEW,
         glowIntensity: SETTINGS.CHARACTERS.GLOW_INTENSITY,
         xCoord: this.#startingXCoord,
         yCoord: yCoordForNextRaindrop,
@@ -127,9 +127,9 @@ document.ScreenSavior.RainColumn = (() => {
      * @returns {void} 
      */
     #clearRaindrop(raindrop, context) {
-      context.shadowColor = COLORS.DARKER5
+      context.shadowColor = COLORS.DEAD
       context.shadowBlur = 0
-      context.fillStyle = COLORS.DARKER5
+      context.fillStyle = COLORS.DEAD
 
       const fontSize = SETTINGS.CHARACTERS.FONT_SIZE
       const glowIntensity = SETTINGS.CHARACTERS.GLOW_INTENSITY
@@ -159,23 +159,41 @@ document.ScreenSavior.RainColumn = (() => {
      * @returns {[COLORS, RAINDROP_STATES]}
      */
     #getUpdatedRaindropColorAndState(raindrop) {
+      const {
+        DEAD,
+      
+        TO_DEAD_4,
+        TO_DEAD_3,
+        TO_DEAD_2,
+        TO_DEAD_1,
+
+        LIVING,
+
+        TO_NEW_1,
+        TO_NEW_2,
+        TO_NEW_3,
+        TO_NEW_4,
+
+        NEW,
+      } = COLORS
+
       switch (raindrop.color) {
-        case COLORS.LIGHTER5: return [COLORS.LIGHTER4, RAINDROP_STATES.APPEARING]
-        case COLORS.LIGHTER4: return [COLORS.LIGHTER3, RAINDROP_STATES.APPEARING]
-        case COLORS.LIGHTER3: return [COLORS.LIGHTER2, RAINDROP_STATES.APPEARING]
-        case COLORS.LIGHTER2: return [COLORS.LIGHTER1, RAINDROP_STATES.APPEARING]
-        case COLORS.LIGHTER1: return [COLORS.PURE, RAINDROP_STATES.LIVING]
+        case NEW:      return [TO_NEW_4, RAINDROP_STATES.APPEARING]
+        case TO_NEW_4: return [TO_NEW_3, RAINDROP_STATES.APPEARING]
+        case TO_NEW_3: return [TO_NEW_2, RAINDROP_STATES.APPEARING]
+        case TO_NEW_2: return [TO_NEW_1, RAINDROP_STATES.APPEARING]
+        case TO_NEW_1: return [LIVING,   RAINDROP_STATES.LIVING]
 
-        case COLORS.PURE:
+        case LIVING:
           return raindrop.lifetime > 0
-            ? [COLORS.PURE, RAINDROP_STATES.LIVING]
-            : [COLORS.DARKER1, RAINDROP_STATES.DISAPPEARING]
+            ? [LIVING, RAINDROP_STATES.LIVING]
+            : [TO_DEAD_1, RAINDROP_STATES.DISAPPEARING]
 
-        case COLORS.DARKER1: return [COLORS.DARKER2, RAINDROP_STATES.DISAPPEARING]
-        case COLORS.DARKER2: return [COLORS.DARKER3, RAINDROP_STATES.DISAPPEARING]
-        case COLORS.DARKER3: return [COLORS.DARKER4, RAINDROP_STATES.DISAPPEARING]
-        case COLORS.DARKER4: return [COLORS.DARKER5, RAINDROP_STATES.DISAPPEARING]
-        case COLORS.DARKER5: return [COLORS.DARKER5, RAINDROP_STATES.DEAD]
+        case TO_DEAD_1: return [TO_DEAD_2, RAINDROP_STATES.DISAPPEARING]
+        case TO_DEAD_2: return [TO_DEAD_3, RAINDROP_STATES.DISAPPEARING]
+        case TO_DEAD_3: return [TO_DEAD_4, RAINDROP_STATES.DISAPPEARING]
+        case TO_DEAD_4: return [DEAD,      RAINDROP_STATES.DISAPPEARING]
+        case DEAD:      return [DEAD,      RAINDROP_STATES.DEAD]
 
         default:
           debugger
