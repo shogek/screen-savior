@@ -18,7 +18,7 @@ document.ScreenSavior.SETTINGS = (() => {
       /** The space between the top of the column and the screen top (in pixels). */
       PADDING_LEFT: 15,
       /** A range from 0 to X (in miliseconds) from which a column of rain may begin. */
-      RANDOMIZE_START: 2000,
+      RANDOMIZE_START: 1000,
     },
 
     CHARACTERS: {
@@ -28,8 +28,10 @@ document.ScreenSavior.SETTINGS = (() => {
       VERTICAL_GAP: 15,
       /** The space between character columns (in pixels). */
       HORIZONTAL_GAP: 35,
-      /** How long the character has the matrix green color before fading out (in screen updates). */
-      LIFETIME: 8,
+      /** TODO: before fading out (in screen updates). */
+      TIME_ALIVE: 8,
+      /** TODO: before fading out (in screen updates). */
+      TIME_DEAD: 5,
       /** The chance for a character to be substituted with another one (0-100). */
       RANDOMIZE_CHANCE: 95,
       /** Add a glow to the most recent characters (0-100). */

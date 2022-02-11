@@ -17,21 +17,122 @@ document.ScreenSavior.RainColumn = (() => {
     #startingXCoord = NaN
     #maxYCoord = NaN
     #verticalGap = NaN
+
+    #raindropsToUpdate = 1
     #raindrops = []
 
-    /**
-      * @param {number} startingXCoord - The X axis coordinate from which the snake will crawl. 
-      * @param {number} maxYCoord - The Y axis coordinate which marks the end of the screen.
-      * @param {number} verticalGap - The gap between characters drawn on screen.
-      */
-    constructor({ startingXCoord, maxYCoord, verticalGap }) {
-      assert({ value: startingXCoord, type: 'number', isRequired: true })
-      assert({ value: maxYCoord, type: 'number', isRequired: true })
-      assert({ value: verticalGap, type: 'number', isRequired: true })
+    init({ startingXCoord, startingYCoord, maxYCoord, characterHeight, characterGap }) {
+      for (let currentYCoord = startingYCoord; currentYCoord <= maxYCoord; currentYCoord += characterHeight + characterGap) {
+        const raindrop = new Raindrop({
+          character: CHARACTERS[getRandomNumber(CHARACTERS.length)],
+          color: COLORS.DEAD,
+          glowIntensity: 0,
+          xCoord: startingXCoord,
+          yCoord: currentYCoord,
+          state: RAINDROP_STATES.INITIAL,
+        })
+        this.#raindrops.push(raindrop)
+      }
+    }
 
-      this.#startingXCoord = startingXCoord
-      this.#maxYCoord = maxYCoord
-      this.#verticalGap = verticalGap
+    updateNew(context) {
+      const toInitializeCount = this.#raindropsToUpdate > this.#raindrops.length
+        ? this.#raindrops.length
+        : this.#raindropsToUpdate
+
+      for (let i = 0; i < toInitializeCount; i++) {
+        const raindrop = this.#raindrops[i]        
+        if (raindrop === undefined) {
+          debugger
+        }
+        this.#clearRaindrop(raindrop, context)
+        this.#updateRaindrop(raindrop)
+        this.#tryRandomizeCharacter(raindrop)
+        this.#drawRaindrop(raindrop, context)
+      }
+
+      this.#raindropsToUpdate++
+    }
+
+    #updateRaindrop(raindrop) {
+      if (raindrop.state === RAINDROP_STATES.INITIAL) {
+        raindrop.setState(RAINDROP_STATES.APPEARING)
+        raindrop.setColor(COLORS.NEW)
+        raindrop.setGlowIntensity(SETTINGS.CHARACTERS.GLOW_INTENSITY)
+        return
+      }
+
+      if (raindrop.state === RAINDROP_STATES.APPEARING) {
+        if (raindrop.color === COLORS.TO_NEW_1) {
+          raindrop.setState(RAINDROP_STATES.LIVING)
+          raindrop.setColor(COLORS.LIVING)
+          raindrop.setGlowIntensity(0)
+        }
+
+        if (raindrop.color === COLORS.TO_NEW_2) {
+          raindrop.setColor(COLORS.TO_NEW_1)
+        }
+
+        if (raindrop.color === COLORS.TO_NEW_3) {
+          raindrop.setColor(COLORS.TO_NEW_2)
+        }
+
+        if (raindrop.color === COLORS.TO_NEW_4) {
+          raindrop.setColor(COLORS.TO_NEW_3)
+        }
+
+        if (raindrop.color === COLORS.NEW) {
+          raindrop.setColor(COLORS.TO_NEW_4)
+        }
+
+        return
+      }
+
+      if (raindrop.state === RAINDROP_STATES.LIVING) {
+        if (raindrop.timeAlive >= SETTINGS.CHARACTERS.TIME_ALIVE) {
+          raindrop.setState(RAINDROP_STATES.DISAPPEARING)
+          raindrop.setColor(COLORS.TO_DEAD_1)
+          raindrop.setGlowIntensity(0)
+          raindrop.setTimeAlive(0)
+        } else {
+          raindrop.setTimeAlive(raindrop.timeAlive + 1)
+        }
+
+        return
+      }
+
+      if (raindrop.state === RAINDROP_STATES.DISAPPEARING) {
+        if (raindrop.color === COLORS.TO_DEAD_1) {
+          raindrop.setColor(COLORS.TO_DEAD_2)
+        }
+
+        if (raindrop.color === COLORS.TO_DEAD_2) {
+          raindrop.setColor(COLORS.TO_DEAD_3)
+        }
+
+        if (raindrop.color === COLORS.TO_DEAD_3) {
+          raindrop.setColor(COLORS.TO_DEAD_4)
+        }
+
+        if (raindrop.color === COLORS.TO_DEAD_4) {
+          raindrop.setState(RAINDROP_STATES.DEAD)
+          raindrop.setColor(COLORS.DEAD)
+          raindrop.setGlowIntensity(0)
+        }
+        
+        return
+      }
+
+      if (raindrop.state === RAINDROP_STATES.DEAD) {
+        if (raindrop.timeDead >= SETTINGS.CHARACTERS.TIME_DEAD) {
+          raindrop.setTimeDead(0)
+          raindrop.setState(RAINDROP_STATES.APPEARING)
+          raindrop.setColor(COLORS.NEW)
+          raindrop.setGlowIntensity(SETTINGS.CHARACTERS.GLOW_INTENSITY)
+        } else {
+          raindrop.setTimeDead(raindrop.timeDead + 1)
+        }
+      }
     }
 
     /**

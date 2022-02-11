@@ -15,7 +15,8 @@ document.ScreenSavior.Raindrop = (() => {
         #state = RAINDROP_STATES.INITIAl
         #xCoord = NaN
         #yCoord = NaN
-        #lifetime = NaN
+        #timeAlive = NaN
+        #timeDead = NaN
 
         /**
          * @param {string} character - The text character that it represents on the screen, ex.: 'A'.
@@ -24,7 +25,6 @@ document.ScreenSavior.Raindrop = (() => {
          * @param {number} xCoord - The X axis coordinate where it should be drawn.
          * @param {number} yCoord - The Y axis coordinate where it should be drawn.
          * @param {RAINDROP_STATES} raindropState - The state of the raindrop.
-         * @param {number} lifetime - The amount of redraws the raindrop should wait before it starts to fade out.
          */
         constructor({ character, color, glowIntensity, xCoord, yCoord, state, lifetime }) {
             assert({ value: character, type: 'string', isRequired: true })
@@ -33,7 +33,6 @@ document.ScreenSavior.Raindrop = (() => {
             assert({ value: xCoord, type: 'number', isRequired: true })
             assert({ value: yCoord, type: 'number', isRequired: true })
             assert({ value: state, type: 'string', isRequired: true })
-            assert({ value: lifetime, type: 'number', isRequired: true })
 
             this.#character = character
             this.#color = color
@@ -41,7 +40,8 @@ document.ScreenSavior.Raindrop = (() => {
             this.#xCoord = xCoord
             this.#yCoord = yCoord
             this.#state = state
-            this.#lifetime = lifetime
+            this.#timeAlive = 0
+            this.#timeDead = 0
         }
 
         /**
@@ -78,7 +78,7 @@ document.ScreenSavior.Raindrop = (() => {
             return this.#glowIntensity
         }
         /**
-         * @param {string} glowIntensity - The intensity of the character's glow.
+         * @param {number} glowIntensity - The intensity of the character's glow.
          */
         setGlowIntensity(glowIntensity) {
             this.#glowIntensity = glowIntensity
@@ -118,14 +118,29 @@ document.ScreenSavior.Raindrop = (() => {
         }
 
         /**
-         * @returns {number} The amount of redraws the raindrop should wait before it starts to fade out.
+         * @returns {number} The amount of redraws the raindrop is in `RAINDROP_STATES.ALIVE`.
          */
-        get lifetime() {
-            return this.#lifetime
+        get timeAlive() {
+            return this.#timeAlive
+        }
+        /**
+         * @param {number} timeAlive 
+         */
+        setTimeAlive(timeAlive) {
+            this.#timeAlive = timeAlive
         }
 
-        decreaseLifetime() {
-            this.#lifetime -= 1
+        /**
+         * @returns {number} The amount of redraws the raindrop is in `RAINDROP_STATES.DEAD`.
+         */
+        get timeDead() {
+            return this.#timeDead
+        }
+        /**
+         * @param {number} timeDead 
+         */
+        setTimeDead(timeDead) {
+            this.#timeDead = timeDead
         }
     }
 
