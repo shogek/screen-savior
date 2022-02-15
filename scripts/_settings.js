@@ -1,7 +1,7 @@
 document.ScreenSavior.SETTINGS = (() => {
    
    return {
-      REFRESH_TIME: 100,
+      RANDOMIZE_REFRESH_TIME: 100,
       
       COLORS: {
          /** The fade-out color. When a character is close to disappearing, it uses this color. */
@@ -18,7 +18,7 @@ document.ScreenSavior.SETTINGS = (() => {
          /** The space between the top of the column and the screen top (in pixels). */
          PADDING_LEFT: 15,
          /** A range from 0 to X (in miliseconds) from which a column of rain may begin. */
-         RANDOMIZE_START: 100,
+         RANDOMIZE_START: 1000,
       },
       
       CHARACTERS: {
@@ -28,9 +28,9 @@ document.ScreenSavior.SETTINGS = (() => {
          VERTICAL_GAP: 15,
          /** The space between character columns (in pixels). */
          HORIZONTAL_GAP: 35,
-         /** TODO: before fading out (in screen updates). */
+         /** Time the character stays alive before fading out (in screen updates). */
          TIME_ALIVE: 8,
-         /** TODO: before fading out (in screen updates). */
+         /** Time the character stays dad before fading in (in screen updates). */
          TIME_DEAD: 5,
          /** The chance for a character to be substituted with another one (0-100). */
          RANDOMIZE_CHANCE: 95,

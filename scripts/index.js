@@ -68,19 +68,26 @@
     * @param {CanvasRenderingContext2D} context 
     */
    function startRainColumn({ rainColumn, context }) {
-      const randomTimeout = getRandomNumber(SETTINGS.RAIN.RANDOMIZE_START)
-      const randomRefreshTime = getRandomNumber(SETTINGS.REFRESH_TIME) + 50
+      const randomStartTime = getRandomNumber(SETTINGS.RAIN.RANDOMIZE_START)
+      const randomRefreshTime = getRandomNumber(SETTINGS.RANDOMIZE_REFRESH_TIME) + 50
       
-      setTimeout(() => {
-         setInterval(
-            () => rainColumn.draw(context),
-            randomRefreshTime,
-            )
+      setTimeout(
+         () => {
+            const draw = () => {
+               rainColumn.draw(context)
+            
+               setTimeout(
+                  () => requestAnimationFrame(draw),
+                  randomRefreshTime
+               )
+            }
+   
+            requestAnimationFrame(draw)
          },
-         randomTimeout,
-         )
-      }
-      
-      init()
-      
-   })();
+         randomStartTime
+      )
+   }
+
+   init()
+
+})()
