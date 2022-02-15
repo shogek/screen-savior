@@ -51,8 +51,8 @@ document.ScreenSavior.RainColumn = (() => {
        */
       draw(context) {
          const toInitializeCount = this.#raindropsToUpdate > this.#raindrops.length
-         ? this.#raindrops.length
-         : this.#raindropsToUpdate
+            ? this.#raindrops.length
+            : this.#raindropsToUpdate
 
          for (let i = 0; i < toInitializeCount; i++) {
             const raindrop = this.#raindrops[i]
@@ -195,8 +195,8 @@ document.ScreenSavior.RainColumn = (() => {
             case RAINDROP_STATES.FADING_OUT: return RainColumn.#updateRaindropWhenFadingOutState(raindrop)
             case RAINDROP_STATES.DEAD:       return RainColumn.#updateRaindropWhenDeadState(raindrop)
             default:
-            debugger
-            throw new Error(`Raindrop is in an unknown state (${raindrop.state})!`)
+               debugger
+               throw new Error(`Raindrop is in an unknown state (${raindrop.state})!`)
          }
       }
 
