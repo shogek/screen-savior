@@ -1,81 +1,93 @@
 (() => {
- 
-    const {
-        SETTINGS,
-        RainColumn,
-        helpers: {
-            getRandomNumber,
-        }
-    } = document.ScreenSavior
 
-    function init() {
-        const canvas = document.getElementById('canvas')
-        const context = canvas.getContext('2d')
-    
-        resizeCanvasToFitScreen(context)
-        configureCanvasFont(context)
-        configureCanvasColors(context)
-        drawScreenSaver(context)
-    }
+   const {
+      SETTINGS,
+      RainColumn,
+      helpers: {
+         getRandomNumber,
+      }
+   } = document.ScreenSavior
 
-    function resizeCanvasToFitScreen(context) {
-        context.canvas.width = window.innerWidth
-        context.canvas.height = window.innerHeight
-    }
+   function init() {
+      const canvas = document.getElementById('canvas')
+      const context = canvas.getContext('2d', { alpha: false })
 
-    function configureCanvasFont(context) {
-        context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
-        context.textAlign = 'start'
-        context.textBaseline = 'top'
-    }
+      resizeCanvasToFitScreen(context)
+      configureCanvasFont(context)
+      configureCanvasColors(context)
+      initializeRainColumns(context)
+   }
 
-    function configureCanvasColors(context) {
-        context.canvas.style.backgroundColor = SETTINGS.COLORS.DEAD
-    }
+   function resizeCanvasToFitScreen(context) {
+      context.canvas.width = window.innerWidth
+      context.canvas.height = window.innerHeight
+   }
 
-    function configureCanvasFont(context) {
-        context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
-        context.textAlign = 'start'
-        context.textBaseline = 'top'
-    }
+   function configureCanvasFont(context) {
+      context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
+      context.textAlign = 'start'
+      context.textBaseline = 'top'
+   }
 
-    function drawScreenSaver(context) {
-        const verticalGap = SETTINGS.CHARACTERS.VERTICAL_GAP
-        const horizontalGap = SETTINGS.CHARACTERS.HORIZONTAL_GAP
-        const paddingLeft = SETTINGS.RAIN.PADDING_LEFT
+   function configureCanvasColors(context) {
+      context.canvas.style.backgroundColor = SETTINGS.COLORS.DEAD
+   }
 
-        const columnCount = Math.floor(canvas.width / 30)
+   function configureCanvasFont(context) {
+      context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
+      context.textAlign = 'start'
+      context.textBaseline = 'top'
+   }
 
-        // Initialize the rain columns
-        for (let i = 0; i < columnCount; i++) {
-            const rainColumn = new RainColumn({
-                startingXCoord: i * horizontalGap + paddingLeft,
-                maxYCoord: canvas.height,
-                verticalGap: verticalGap,
-            })
+   function initializeRainColumns(context) {
+      const verticalGap = SETTINGS.CHARACTERS.VERTICAL_GAP
+      const horizontalGap = SETTINGS.CHARACTERS.HORIZONTAL_GAP
+      const paddingLeft = SETTINGS.RAIN.PADDING_LEFT
+      const paddingTop = SETTINGS.RAIN.PADDING_TOP
 
-            initializeRainColumn({ rainColumn, context })
-        }
-    }
+      const columnCount = Math.floor(context.canvas.width / 30)
 
-    /**
-     * After a timeout, start the rain column and update it periodically 
-     * @param {RainColumn} rainColumn 
-     * @param {CanvasRenderingContext2D} context 
-     */
-    function initializeRainColumn({ rainColumn, context }) {
-        const randomTimeout = getRandomNumber(SETTINGS.RAIN.RANDOMIZE_START)
-        
-        setTimeout(() => {
-            setInterval(
-                    () => rainColumn.update(context),
-                    SETTINGS.REFRESH_TIME
-                )
-            },
-            randomTimeout,
-        )
-    }
+      // Initialize the rain columns
+      for (let i = 0; i < columnCount; i++) {
+         const rainColumn = new RainColumn()
+         rainColumn.init({
+            startingXCoord: i * horizontalGap + paddingLeft,
+            startingYCoord: paddingTop,
+            maxYCoord: context.canvas.height,
+            characterHeight: SETTINGS.CHARACTERS.FONT_SIZE,
+            characterGap: verticalGap,
+         })
 
-    init()
+         startRainColumn({ rainColumn, context })
+      }
+   }
 
-})();
+   /**
+    * After a timeout, start the rain column and update it periodically
+    * @param {RainColumn} rainColumn
+    * @param {CanvasRenderingContext2D} context
+    */
+   function startRainColumn({ rainColumn, context }) {
+      const randomStartTime = getRandomNumber(SETTINGS.RAIN.RANDOMIZE_START)
+      const randomRefreshTime = getRandomNumber(SETTINGS.RANDOMIZE_REFRESH_TIME) + 50
+
+      setTimeout(
+         () => {
+            const draw = () => {
+               rainColumn.draw(context)
+
+               setTimeout(
+                  () => requestAnimationFrame(draw),
+                  randomRefreshTime
+               )
+            }
+
+            requestAnimationFrame(draw)
+         },
+         randomStartTime
+      )
+   }
+
+   init()
+
+})()
