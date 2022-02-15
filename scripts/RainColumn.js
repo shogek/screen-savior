@@ -1,5 +1,5 @@
 document.ScreenSavior.RainColumn = (() => {
-   
+
    const {
       CHARACTERS,
       SETTINGS,
@@ -11,12 +11,12 @@ document.ScreenSavior.RainColumn = (() => {
          getRandomNumber,
       }
    } = document.ScreenSavior
-   
+
    /** I repesent a single vertical column in the matrix rain. */
    return class RainColumn {
       #raindropsToUpdate = 1
       #raindrops = []
-      
+
       /**
        * Initialize all the raindrops and prepare them for drawing.
        * @param {string} startingXCoord - The X axis coordinate from where the raindrops should be drawn.
@@ -31,7 +31,7 @@ document.ScreenSavior.RainColumn = (() => {
          assert({ value: maxYCoord,       type: 'number', isRequired: true })
          assert({ value: characterHeight, type: 'number', isRequired: true })
          assert({ value: characterGap,    type: 'number', isRequired: true })
-         
+
          for (let currentYCoord = startingYCoord; currentYCoord <= maxYCoord; currentYCoord += characterHeight + characterGap) {
             const raindrop = new Raindrop({
                character: CHARACTERS[getRandomNumber(CHARACTERS.length)],
@@ -44,7 +44,7 @@ document.ScreenSavior.RainColumn = (() => {
             this.#raindrops.push(raindrop)
          }
       }
-      
+
       /**
        * Draw the raindrops in the column.
        * @param {CanvasRenderingContext2D} context
@@ -53,25 +53,25 @@ document.ScreenSavior.RainColumn = (() => {
          const toInitializeCount = this.#raindropsToUpdate > this.#raindrops.length
          ? this.#raindrops.length
          : this.#raindropsToUpdate
-         
+
          for (let i = 0; i < toInitializeCount; i++) {
             const raindrop = this.#raindrops[i]
-            
+
             const doesNeedRedraw = this.#updateRaindrop(raindrop)
             if (!doesNeedRedraw) {
                continue
             }
-            
+
             this.#clearRaindrop(raindrop, context)
             this.#tryRandomizeCharacter(raindrop)
             this.#drawRaindrop(raindrop, context)
          }
-         
+
          this.#raindropsToUpdate++
       }
-      
+
       /**
-       * @param {Raindrop} raindrop 
+       * @param {Raindrop} raindrop
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
       static #updateRaindropWhenInitialState(raindrop) {
@@ -80,9 +80,9 @@ document.ScreenSavior.RainColumn = (() => {
          raindrop.setGlowIntensity(SETTINGS.CHARACTERS.GLOW_INTENSITY)
          return true
       }
-      
+
       /**
-       * @param {Raindrop} raindrop 
+       * @param {Raindrop} raindrop
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
       static #updateRaindropWhenFadingInState(raindrop) {
@@ -90,35 +90,35 @@ document.ScreenSavior.RainColumn = (() => {
             case COLORS.NEW:
                raindrop.setColor(COLORS.TO_ALIVE_4)
                break
-            
+
             case COLORS.TO_ALIVE_1:
                raindrop.setState(RAINDROP_STATES.ALIVE)
                raindrop.setColor(COLORS.ALIVE)
                raindrop.setGlowIntensity(0)
                break
-            
+
             case COLORS.TO_ALIVE_2:
                raindrop.setColor(COLORS.TO_ALIVE_1)
                break
-            
+
             case COLORS.TO_ALIVE_3:
                raindrop.setColor(COLORS.TO_ALIVE_2)
                break
-            
+
             case COLORS.TO_ALIVE_4:
                raindrop.setColor(COLORS.TO_ALIVE_3)
                break
-            
+
             default:
                debugger
                throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
          }
-         
+
          return true
       }
-      
+
       /**
-       * @param {Raindrop} raindrop 
+       * @param {Raindrop} raindrop
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
       static #updateRaindropWhenAliveState(raindrop) {
@@ -126,16 +126,16 @@ document.ScreenSavior.RainColumn = (() => {
             raindrop.setTimeAlive(raindrop.timeAlive + 1)
             return false
          }
-         
+
          raindrop.setState(RAINDROP_STATES.FADING_OUT)
          raindrop.setColor(COLORS.TO_DEAD_1)
          raindrop.setGlowIntensity(0)
          raindrop.setTimeAlive(0)
          return true
       }
-      
+
       /**
-       * @param {Raindrop} raindrop 
+       * @param {Raindrop} raindrop
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
       static #updateRaindropWhenFadingOutState(raindrop) {
@@ -143,31 +143,31 @@ document.ScreenSavior.RainColumn = (() => {
             case COLORS.TO_DEAD_1:
                raindrop.setColor(COLORS.TO_DEAD_2)
                break
-            
+
             case COLORS.TO_DEAD_2:
                raindrop.setColor(COLORS.TO_DEAD_3)
                break
-            
+
             case COLORS.TO_DEAD_3:
                raindrop.setColor(COLORS.TO_DEAD_4)
                break
-            
+
             case COLORS.TO_DEAD_4:
                raindrop.setState(RAINDROP_STATES.DEAD)
                raindrop.setColor(COLORS.DEAD)
                raindrop.setGlowIntensity(0)
                break
-            
+
             default:
                debugger
                throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
          }
-         
+
          return true
       }
-      
+
       /**
-       * @param {Raindrop} raindrop 
+       * @param {Raindrop} raindrop
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
       static #updateRaindropWhenDeadState(raindrop) {
@@ -175,16 +175,16 @@ document.ScreenSavior.RainColumn = (() => {
             raindrop.setTimeDead(raindrop.timeDead + 1)
             return false
          }
-         
+
          raindrop.setTimeDead(0)
          raindrop.setState(RAINDROP_STATES.FADING_IN)
          raindrop.setColor(COLORS.NEW)
          raindrop.setGlowIntensity(SETTINGS.CHARACTERS.GLOW_INTENSITY)
          return true
       }
-      
+
       /**
-       * @param {Raindrop} raindrop 
+       * @param {Raindrop} raindrop
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
       #updateRaindrop(raindrop) {
@@ -199,7 +199,7 @@ document.ScreenSavior.RainColumn = (() => {
             throw new Error(`Raindrop is in an unknown state (${raindrop.state})!`)
          }
       }
-      
+
       /**
        * Change the raindrops displayed character if its lucky.
        * @param {Raindrop} raindrop
@@ -210,11 +210,11 @@ document.ScreenSavior.RainColumn = (() => {
          if (randomNumber < SETTINGS.CHARACTERS.RANDOMIZE_CHANCE) {
             return
          }
-         
+
          const randomCharacter = CHARACTERS[getRandomNumber(CHARACTERS.length)]
          raindrop.setCharacter(randomCharacter)
       }
-      
+
       /**
        * Draw a black square in the place of the raindrop.
        * @param {Raindrop} raindrop
@@ -225,7 +225,7 @@ document.ScreenSavior.RainColumn = (() => {
          context.shadowColor = COLORS.DEAD
          context.shadowBlur = 0
          context.fillStyle = COLORS.DEAD
-         
+
          const fontSize = SETTINGS.CHARACTERS.FONT_SIZE
          const glowIntensity = SETTINGS.CHARACTERS.GLOW_INTENSITY
          context.fillRect(
@@ -235,7 +235,7 @@ document.ScreenSavior.RainColumn = (() => {
             fontSize + glowIntensity * 3,
          )
       }
-         
+
       /**
        * @param {Raindrop} raindrop
        * @param {CanvasRenderingContext2D} context
@@ -246,13 +246,13 @@ document.ScreenSavior.RainColumn = (() => {
             context.fillStyle = raindrop.color
             context.shadowColor = raindrop.color
          }
-         
+
          if (context.shadowBlur !== raindrop.glowIntensity) {
             context.shadowBlur = raindrop.glowIntensity
          }
-         
+
          context.fillText(raindrop.character, raindrop.xCoord, raindrop.yCoord)
       }
    }
-      
+
 })()

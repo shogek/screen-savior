@@ -1,12 +1,12 @@
 document.ScreenSavior.Raindrop = (() => {
-   
+
    const {
       RAINDROP_STATES,
       helpers: {
          assert
       },
    } = document.ScreenSavior
-   
+
    /** I represent a single character in a rain column. */
    return class Raindrop {
       #character = ''
@@ -17,10 +17,10 @@ document.ScreenSavior.Raindrop = (() => {
       #yCoord = NaN
       #timeAlive = NaN
       #timeDead = NaN
-      
+
       /**
        * @param {string} character - The text character that it represents on the screen, ex.: 'A'.
-       * @param {string} color - The color of the text character as it will be shown on the screen, ex.: '#FFFFFF'. 
+       * @param {string} color - The color of the text character as it will be shown on the screen, ex.: '#FFFFFF'.
        * @param {number} glowIntensity - The intensity of the character's glow.
        * @param {number} xCoord - The X axis coordinate where it should be drawn.
        * @param {number} yCoord - The Y axis coordinate where it should be drawn.
@@ -33,7 +33,7 @@ document.ScreenSavior.Raindrop = (() => {
          assert({ value: xCoord,        type: 'number', isRequired: true })
          assert({ value: yCoord,        type: 'number', isRequired: true })
          assert({ value: state,         type: 'string', isRequired: true })
-         
+
          this.#character = character
          this.#color = color
          this.#glowIntensity = glowIntensity
@@ -43,13 +43,13 @@ document.ScreenSavior.Raindrop = (() => {
          this.#timeAlive = 0
          this.#timeDead = 0
       }
-      
+
       /**
        * @returns {string} The text character that it represents on the screen, ex.: 'A'.
        */
       get character() {
          return this.#character
-         
+
       }
       /**
        * @param {string} character - The text character that it represents on the screen, ex.: 'A'.
@@ -57,7 +57,7 @@ document.ScreenSavior.Raindrop = (() => {
       setCharacter(character) {
          this.#character = character
       }
-      
+
       /**
        * @returns {string} The color of the text character as it will be shown on the screen, ex.: '#FFFFFF'.
        */
@@ -70,7 +70,7 @@ document.ScreenSavior.Raindrop = (() => {
       setColor(color) {
          this.#color = color
       }
-      
+
       /**
        * @returns {number} The intensity of the character's glow.
        */
@@ -83,14 +83,14 @@ document.ScreenSavior.Raindrop = (() => {
       setGlowIntensity(glowIntensity) {
          this.#glowIntensity = glowIntensity
       }
-      
+
       /**
        * @returns {number} The X axis coordinate where it should be drawn.
        */
       get xCoord() {
          return this.#xCoord
       }
-      
+
       /**
        * @returns {number} The Y axis coordinate where it should be drawn.
        */
@@ -103,7 +103,7 @@ document.ScreenSavior.Raindrop = (() => {
       setYCoord(yCoord) {
          this.#yCoord = yCoord
       }
-      
+
       /**
        * @returns {RAINDROP_STATES} The state of the raindrop.
        */
@@ -116,7 +116,7 @@ document.ScreenSavior.Raindrop = (() => {
       setState(raindropState) {
          this.#state = raindropState
       }
-      
+
       /**
        * @returns {number} The amount of redraws the raindrop is in `RAINDROP_STATES.ALIVE`.
        */
@@ -124,12 +124,12 @@ document.ScreenSavior.Raindrop = (() => {
          return this.#timeAlive
       }
       /**
-       * @param {number} timeAlive 
+       * @param {number} timeAlive
        */
       setTimeAlive(timeAlive) {
          this.#timeAlive = timeAlive
       }
-      
+
       /**
        * @returns {number} The amount of redraws the raindrop is in `RAINDROP_STATES.DEAD`.
        */
@@ -137,11 +137,11 @@ document.ScreenSavior.Raindrop = (() => {
          return this.#timeDead
       }
       /**
-       * @param {number} timeDead 
+       * @param {number} timeDead
        */
       setTimeDead(timeDead) {
          this.#timeDead = timeDead
       }
    }
-   
+
 })()
