@@ -5,13 +5,13 @@ document.ScreenSavior.RAINDROP_STATES = (() => {
       INITIAL: 'INITIAL',
       
       /** The character is transitioning from white to matrix green. */
-      APPEARING: 'APPEARING',
+      FADING_IN: 'FADING_IN',
       
       /** The character is staying in matrix green (until eol). */
-      LIVING: 'LIVING',
+      ALIVE: 'ALIVE',
       
       /** The character is transitioning from matrix green to black. */
-      DISAPPEARING: 'DISAPPEARING',
+      FADING_OUT: 'FADING_OUT',
       
       /** The character is no longer visible. */
       DEAD: 'DEAD',

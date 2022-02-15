@@ -54,26 +54,26 @@ document.ScreenSavior.COLORS = (() => {
       /** Used when the character's lifetime ends (it's the background color). */
       DEAD: SETTINGS.COLORS.DEAD,
       
-      /** [Fade-out] A generated color between `DEAD` and `LIVING`. Closer to `DEAD`. */
-      TO_DEAD_4: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.LIVING, 0.8),
-      /** [Fade-out] A generated color between `DEAD` and `LIVING`. Closer to `DEAD`. */
-      TO_DEAD_3: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.LIVING, 0.6),
-      /** [Fade-out] A generated color between `DEAD` and `LIVING`. Closer to `LIVING`. */
-      TO_DEAD_2: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.LIVING, 0.4),
-      /** [Fade-out] A generated color between `DEAD` and `LIVING`. Closer to `LIVING`. */
-      TO_DEAD_1: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.LIVING, 0.2),
+      /** [Fade-out] A generated color between `DEAD` and `ALIVE`. Closer to `DEAD`. */
+      TO_DEAD_4: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.ALIVE, 0.8),
+      /** [Fade-out] A generated color between `DEAD` and `ALIVE`. Closer to `DEAD`. */
+      TO_DEAD_3: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.ALIVE, 0.6),
+      /** [Fade-out] A generated color between `DEAD` and `ALIVE`. Closer to `ALIVE`. */
+      TO_DEAD_2: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.ALIVE, 0.4),
+      /** [Fade-out] A generated color between `DEAD` and `ALIVE`. Closer to `ALIVE`. */
+      TO_DEAD_1: getColorBetween(SETTINGS.COLORS.DEAD, SETTINGS.COLORS.ALIVE, 0.2),
       
       /** Used when the characters lifetime begins (between fade-in and fade-out). */
-      LIVING: SETTINGS.COLORS.LIVING,
+      ALIVE: SETTINGS.COLORS.ALIVE,
       
-      /** [Fade-in] A generated color between `LIVING` and `NEW`. Closer to `LIVING`. */
-      TO_NEW_1: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.LIVING, 0.2),
-      /** [Fade-in] A generated color between `LIVING` and `NEW`. Closer to `LIVING`. */
-      TO_NEW_2: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.LIVING, 0.4),
-      /** [Fade-in] A generated color between `LIVING` and `NEW`. Closer to `NEW`. */
-      TO_NEW_3: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.LIVING, 0.6),
-      /** [Fade-in] A generated color between `LIVING` and `NEW`. Closer to `NEW`. */
-      TO_NEW_4: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.LIVING, 0.8),
+      /** [Fade-in] A generated color between `ALIVE` and `NEW`. Closer to `ALIVE`. */
+      TO_ALIVE_1: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.ALIVE, 0.2),
+      /** [Fade-in] A generated color between `ALIVE` and `NEW`. Closer to `ALIVE`. */
+      TO_ALIVE_2: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.ALIVE, 0.4),
+      /** [Fade-in] A generated color between `ALIVE` and `NEW`. Closer to `NEW`. */
+      TO_ALIVE_3: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.ALIVE, 0.6),
+      /** [Fade-in] A generated color between `ALIVE` and `NEW`. Closer to `NEW`. */
+      TO_ALIVE_4: getColorBetween(SETTINGS.COLORS.NEW, SETTINGS.COLORS.ALIVE, 0.8),
       
       /** Used when a character is drawn on the screen for the first time. */
       NEW: SETTINGS.COLORS.NEW,

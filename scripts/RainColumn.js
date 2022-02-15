@@ -74,8 +74,8 @@ document.ScreenSavior.RainColumn = (() => {
        * @param {Raindrop} raindrop 
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
-      static #updateRaindropInInitialState(raindrop) {
-         raindrop.setState(RAINDROP_STATES.APPEARING)
+      static #updateRaindropWhenInitialState(raindrop) {
+         raindrop.setState(RAINDROP_STATES.FADING_IN)
          raindrop.setColor(COLORS.NEW)
          raindrop.setGlowIntensity(SETTINGS.CHARACTERS.GLOW_INTENSITY)
          return true
@@ -85,33 +85,33 @@ document.ScreenSavior.RainColumn = (() => {
        * @param {Raindrop} raindrop 
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
-      static #updateRaindropInAppearingState(raindrop) {
+      static #updateRaindropWhenFadingInState(raindrop) {
          switch (raindrop.color) {
             case COLORS.NEW:
-            raindrop.setColor(COLORS.TO_NEW_4)
-            break
+               raindrop.setColor(COLORS.TO_ALIVE_4)
+               break
             
-            case COLORS.TO_NEW_1:
-            raindrop.setState(RAINDROP_STATES.LIVING)
-            raindrop.setColor(COLORS.LIVING)
-            raindrop.setGlowIntensity(0)
-            break
+            case COLORS.TO_ALIVE_1:
+               raindrop.setState(RAINDROP_STATES.ALIVE)
+               raindrop.setColor(COLORS.ALIVE)
+               raindrop.setGlowIntensity(0)
+               break
             
-            case COLORS.TO_NEW_2:
-            raindrop.setColor(COLORS.TO_NEW_1)
-            break
+            case COLORS.TO_ALIVE_2:
+               raindrop.setColor(COLORS.TO_ALIVE_1)
+               break
             
-            case COLORS.TO_NEW_3:
-            raindrop.setColor(COLORS.TO_NEW_2)
-            break
+            case COLORS.TO_ALIVE_3:
+               raindrop.setColor(COLORS.TO_ALIVE_2)
+               break
             
-            case COLORS.TO_NEW_4:
-            raindrop.setColor(COLORS.TO_NEW_3)
-            break
+            case COLORS.TO_ALIVE_4:
+               raindrop.setColor(COLORS.TO_ALIVE_3)
+               break
             
             default:
-            debugger
-            throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
+               debugger
+               throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
          }
          
          return true
@@ -121,13 +121,13 @@ document.ScreenSavior.RainColumn = (() => {
        * @param {Raindrop} raindrop 
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
-      static #updateRaindropInLivingState(raindrop) {
+      static #updateRaindropWhenAliveState(raindrop) {
          if (raindrop.timeAlive < SETTINGS.CHARACTERS.TIME_ALIVE) {
             raindrop.setTimeAlive(raindrop.timeAlive + 1)
             return false
          }
          
-         raindrop.setState(RAINDROP_STATES.DISAPPEARING)
+         raindrop.setState(RAINDROP_STATES.FADING_OUT)
          raindrop.setColor(COLORS.TO_DEAD_1)
          raindrop.setGlowIntensity(0)
          raindrop.setTimeAlive(0)
@@ -138,29 +138,29 @@ document.ScreenSavior.RainColumn = (() => {
        * @param {Raindrop} raindrop 
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
-      static #updateRaindropInDisappearingState(raindrop) {
+      static #updateRaindropWhenFadingOutState(raindrop) {
          switch (raindrop.color) {
             case COLORS.TO_DEAD_1:
-            raindrop.setColor(COLORS.TO_DEAD_2)
-            break
+               raindrop.setColor(COLORS.TO_DEAD_2)
+               break
             
             case COLORS.TO_DEAD_2:
-            raindrop.setColor(COLORS.TO_DEAD_3)
-            break
+               raindrop.setColor(COLORS.TO_DEAD_3)
+               break
             
             case COLORS.TO_DEAD_3:
-            raindrop.setColor(COLORS.TO_DEAD_4)
-            break
+               raindrop.setColor(COLORS.TO_DEAD_4)
+               break
             
             case COLORS.TO_DEAD_4:
-            raindrop.setState(RAINDROP_STATES.DEAD)
-            raindrop.setColor(COLORS.DEAD)
-            raindrop.setGlowIntensity(0)
-            break
+               raindrop.setState(RAINDROP_STATES.DEAD)
+               raindrop.setColor(COLORS.DEAD)
+               raindrop.setGlowIntensity(0)
+               break
             
             default:
-            debugger
-            throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
+               debugger
+               throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
          }
          
          return true
@@ -170,14 +170,14 @@ document.ScreenSavior.RainColumn = (() => {
        * @param {Raindrop} raindrop 
        * @returns {boolean} `true` if the raindrop needs to be redrawn, else - `false`
        */
-      static #updateRaindropInDeadState(raindrop) {
+      static #updateRaindropWhenDeadState(raindrop) {
          if (raindrop.timeDead < SETTINGS.CHARACTERS.TIME_DEAD) {
             raindrop.setTimeDead(raindrop.timeDead + 1)
             return false
          }
          
          raindrop.setTimeDead(0)
-         raindrop.setState(RAINDROP_STATES.APPEARING)
+         raindrop.setState(RAINDROP_STATES.FADING_IN)
          raindrop.setColor(COLORS.NEW)
          raindrop.setGlowIntensity(SETTINGS.CHARACTERS.GLOW_INTENSITY)
          return true
@@ -189,11 +189,11 @@ document.ScreenSavior.RainColumn = (() => {
        */
       #updateRaindrop(raindrop) {
          switch (raindrop.state) {
-            case RAINDROP_STATES.INITIAL:      return RainColumn.#updateRaindropInInitialState(raindrop)
-            case RAINDROP_STATES.APPEARING:    return RainColumn.#updateRaindropInAppearingState(raindrop)
-            case RAINDROP_STATES.LIVING:       return RainColumn.#updateRaindropInLivingState(raindrop)
-            case RAINDROP_STATES.DISAPPEARING: return RainColumn.#updateRaindropInDisappearingState(raindrop)
-            case RAINDROP_STATES.DEAD:         return RainColumn.#updateRaindropInDeadState(raindrop)
+            case RAINDROP_STATES.INITIAL:    return RainColumn.#updateRaindropWhenInitialState(raindrop)
+            case RAINDROP_STATES.FADING_IN:  return RainColumn.#updateRaindropWhenFadingInState(raindrop)
+            case RAINDROP_STATES.ALIVE:      return RainColumn.#updateRaindropWhenAliveState(raindrop)
+            case RAINDROP_STATES.FADING_OUT: return RainColumn.#updateRaindropWhenFadingOutState(raindrop)
+            case RAINDROP_STATES.DEAD:       return RainColumn.#updateRaindropWhenDeadState(raindrop)
             default:
             debugger
             throw new Error(`Raindrop is in an unknown state (${raindrop.state})!`)
@@ -206,10 +206,6 @@ document.ScreenSavior.RainColumn = (() => {
        * @returns {void}
        */
       #tryRandomizeCharacter(raindrop) {
-         if (raindrop.state === RAINDROP_STATES.APPEARING) {
-            return
-         }
-         
          const randomNumber = getRandomNumber(100)
          if (randomNumber < SETTINGS.CHARACTERS.RANDOMIZE_CHANCE) {
             return

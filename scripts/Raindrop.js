@@ -12,7 +12,7 @@ document.ScreenSavior.Raindrop = (() => {
       #character = ''
       #color = ''
       #glowIntensity = NaN
-      #state = RAINDROP_STATES.INITIAl
+      #state = RAINDROP_STATES.INITIAL
       #xCoord = NaN
       #yCoord = NaN
       #timeAlive = NaN

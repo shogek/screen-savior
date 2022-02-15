@@ -7,7 +7,7 @@ document.ScreenSavior.SETTINGS = (() => {
          /** The fade-out color. When a character is close to disappearing, it uses this color. */
          DEAD: '#000000',
          /** The color the characters use between fade-in and fade-out. */
-         LIVING: '#006300',
+         ALIVE: '#006300',
          /** The fade-in color. When a character appears on screen, it uses this color. */
          NEW: '#ffffff',
       },
