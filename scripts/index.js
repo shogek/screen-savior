@@ -9,18 +9,35 @@
    } = document.ScreenSavior
 
    function init() {
-      const canvas = document.getElementById('canvas')
-      const context = canvas.getContext('2d', { alpha: false })
-
-      resizeCanvasToFitScreen(context)
-      configureCanvasFont(context)
-      configureCanvasColors(context)
-      initializeRainColumns(context)
+      const canvases = createCanvases()
+      initializeNewRainColumns(canvases)
    }
 
-   function resizeCanvasToFitScreen(context) {
-      context.canvas.width = window.innerWidth
-      context.canvas.height = window.innerHeight
+   function createCanvases() {
+      const canvases = []
+      let currentLeftCoord = SETTINGS.RAIN.PADDING_LEFT
+      let index = 0
+      while (currentLeftCoord <= document.body.clientWidth) {
+         const canvas = document.createElement('canvas')
+         canvas.id = `canvas-${index}`
+         canvas.style.position = 'absolute'
+         canvas.width = SETTINGS.CHARACTERS.FONT_SIZE
+         canvas.height = window.innerHeight
+         canvas.style.top = `${SETTINGS.RAIN.PADDING_TOP}px`
+         canvas.style.left = `${currentLeftCoord}px`
+
+         const context = canvas.getContext('2d', { alpha: false })
+         configureCanvasFont(context)
+         configureCanvasColors(context)
+
+         document.body.appendChild(canvas)
+         canvases.push(canvas)
+
+         index++
+         currentLeftCoord += SETTINGS.CHARACTERS.FONT_SIZE + SETTINGS.CHARACTERS.HORIZONTAL_GAP
+      }
+
+      return canvases
    }
 
    function configureCanvasFont(context) {
@@ -33,27 +50,19 @@
       context.canvas.style.backgroundColor = SETTINGS.COLORS.DEAD
    }
 
-   function configureCanvasFont(context) {
-      context.font = `${SETTINGS.CHARACTERS.FONT_SIZE}px monospace`
-      context.textAlign = 'start'
-      context.textBaseline = 'top'
-   }
-
-   function initializeRainColumns(context) {
-      const verticalGap = SETTINGS.CHARACTERS.VERTICAL_GAP
-      const horizontalGap = SETTINGS.CHARACTERS.HORIZONTAL_GAP
-      const paddingLeft = SETTINGS.RAIN.PADDING_LEFT
+   function initializeNewRainColumns(canvases) {
       const paddingTop = SETTINGS.RAIN.PADDING_TOP
+      const verticalGap = SETTINGS.CHARACTERS.VERTICAL_GAP
 
-      const columnCount = Math.floor(context.canvas.width / 30)
+      for (let i = 0; i < canvases.length; i++) {
+         const canvas = canvases[i]
+         const context = canvas.getContext('2d', { alpha: false })
 
-      // Initialize the rain columns
-      for (let i = 0; i < columnCount; i++) {
          const rainColumn = new RainColumn()
          rainColumn.init({
-            startingXCoord: i * horizontalGap + paddingLeft,
-            startingYCoord: paddingTop,
-            maxYCoord: context.canvas.height,
+            startingXCoord: 0,
+            startingYCoord: 0,
+            maxYCoord: canvas.height,
             characterHeight: SETTINGS.CHARACTERS.FONT_SIZE,
             characterGap: verticalGap,
          })

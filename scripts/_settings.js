@@ -27,7 +27,7 @@ document.ScreenSavior.SETTINGS = (() => {
          /** The space between characters in a single column (in pixels). */
          VERTICAL_GAP: 15,
          /** The space between character columns (in pixels). */
-         HORIZONTAL_GAP: 35,
+         HORIZONTAL_GAP: 10,
          /** Time the character stays alive before fading out (in screen updates). */
          TIME_ALIVE: 8,
          /** Time the character stays dad before fading in (in screen updates). */
