@@ -1,8 +1,14 @@
+/**
+ * ! IMPORTANT !
+ * This is the entrypoint of the application!
+ * If renaming this file - also rename it in index.html!
+ */
+
 import { SETTINGS } from './_settings'
 import { RainColumn } from './RainColumn'
 import { getRandomNumber } from './helpers'
 
-function init() {
+function startApplication() {
    const canvas = document.getElementById('canvas') as HTMLCanvasElement
    const context = canvas.getContext('2d', { alpha: false })!
 
@@ -74,4 +80,4 @@ function startRainColumn(rainColumn: RainColumn, context: CanvasRenderingContext
    )
 }
 
-init()
+startApplication()

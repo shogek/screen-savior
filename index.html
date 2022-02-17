@@ -7,22 +7,19 @@
 
    <link rel="stylesheet" href="./styles.css">
 
+   <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+
+   <!-- The JavaScript generated from all the TypeScript files -->
+   <script src="./dist/dist.js"></script>
+
    <title>Screen Savior</title>
 </head>
 <body>
    <canvas id="canvas"></canvas>
 
    <script>
-      document.ScreenSavior = {}
+      // 'index' - name of the TypeScript files which contains the entrypoint of the application.
+      require(['index']);
    </script>
-
-   <script defer src="./scripts/_settings.js"></script>
-   <script defer src="./scripts/RaindropStates.js"></script>
-   <script defer src="./scripts/colors.js"></script>
-   <script defer src="./scripts/characters.js"></script>
-   <script defer src="./scripts/helpers.js"></script>
-   <script defer src="./scripts/Raindrop.js"></script>
-   <script defer src="./scripts/RainColumn.js"></script>
-   <script defer src="./scripts/index.js"></script>
 </body>
 </html>
