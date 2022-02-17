@@ -63,21 +63,14 @@ function startRainColumn(rainColumn: RainColumn, context: CanvasRenderingContext
    const randomStartTime = getRandomNumber(SETTINGS.RAIN.RANDOMIZE_START)
    const randomRefreshTime = getRandomNumber(SETTINGS.RANDOMIZE_REFRESH_TIME) + 50
 
-   setTimeout(
-      () => {
-         const draw = () => {
-            rainColumn.draw(context)
+   setTimeout(() => {
+      const draw = () => {
+         rainColumn.draw(context)
+         setTimeout(() => requestAnimationFrame(draw), randomRefreshTime)
+      }
 
-            setTimeout(
-               () => requestAnimationFrame(draw),
-               randomRefreshTime
-            )
-         }
-
-         requestAnimationFrame(draw)
-      },
-      randomStartTime
-   )
+      requestAnimationFrame(draw)
+   }, randomStartTime)
 }
 
 startApplication()
