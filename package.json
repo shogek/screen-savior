@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "start": "tsc"
+  },
+  "dependencies": {
+    "typescript": "^4.5.5"
+  }
+}
