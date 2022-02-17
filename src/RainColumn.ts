@@ -1,8 +1,7 @@
 import { SETTINGS } from './_settings'
-import { CHARACTERS } from './characters'
 import { COLORS } from './colors'
 import { RAINDROP_STATES } from './RaindropStates'
-import { getRandomNumber } from './helpers'
+import { getRandomCharacter, getRandomNumber } from './helpers'
 import { Raindrop } from './Raindrop'
 
 /** I repesent a single vertical column in the matrix rain. */
@@ -21,7 +20,7 @@ export class RainColumn {
    init(startingXCoord: number, startingYCoord: number, maxYCoord: number, characterHeight: number, characterGap: number) {
       for (let currentYCoord = startingYCoord; currentYCoord <= maxYCoord; currentYCoord += characterHeight + characterGap) {
          const raindrop = new Raindrop(
-            CHARACTERS[getRandomNumber(CHARACTERS.length)]!,
+            getRandomCharacter(),
             COLORS.DEAD,
             0,
             startingXCoord,
@@ -36,9 +35,7 @@ export class RainColumn {
     * Draw the raindrops in the column.
     */
    draw(context: CanvasRenderingContext2D) {
-      const toInitializeCount = this._raindropsToUpdate > this._raindrops.length
-         ? this._raindrops.length
-         : this._raindropsToUpdate
+      const toInitializeCount = this._raindropsToUpdate > this._raindrops.length ? this._raindrops.length : this._raindropsToUpdate
 
       for (let i = 0; i < toInitializeCount; i++) {
          const raindrop = this._raindrops[i]!
@@ -94,7 +91,6 @@ export class RainColumn {
             break
 
          default:
-            debugger
             throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
       }
 
@@ -141,7 +137,6 @@ export class RainColumn {
             break
 
          default:
-            debugger
             throw new Error(`Raindrop in state (${raindrop.state}) has an unknown color (${raindrop.color})!`)
       }
 
@@ -174,9 +169,7 @@ export class RainColumn {
          case RAINDROP_STATES.ALIVE:      return RainColumn.updateRaindropWhenAliveState(raindrop)
          case RAINDROP_STATES.FADING_OUT: return RainColumn.updateRaindropWhenFadingOutState(raindrop)
          case RAINDROP_STATES.DEAD:       return RainColumn.updateRaindropWhenDeadState(raindrop)
-         default:
-            debugger
-            throw new Error(`Raindrop is in an unknown state (${raindrop.state})!`)
+         default: throw new Error(`Raindrop is in an unknown state (${raindrop.state})!`)
       }
    }
 
@@ -189,8 +182,7 @@ export class RainColumn {
          return
       }
 
-      const randomCharacter = CHARACTERS[getRandomNumber(CHARACTERS.length)]!
-      raindrop.setCharacter(randomCharacter)
+      raindrop.setCharacter(getRandomCharacter())
    }
 
    /**

@@ -10,8 +10,8 @@ import { SETTINGS } from './_settings'
  * @returns Color in hex, example: `'#fa42c5'`.
  */
 function getColorBetween(startColor: string, endColor: string, stop: number): string {
-   const [ startRed, startGreen, startBlue ] = getAsRgb(startColor)
-   const [ endRed, endGreen, endBlue ] = getAsRgb(endColor)
+   const [startRed, startGreen, startBlue] = getAsRgb(startColor)
+   const [endRed, endGreen, endBlue] = getAsRgb(endColor)
 
    const stopRed = Math.ceil(startRed! * stop + endRed! * (1 - stop))
    const stopGreen = Math.ceil(startGreen! * stop + endGreen! * (1 - stop))
@@ -30,7 +30,7 @@ function getAsRgb(hexColor: string): number[] {
    return [
       parseInt(color.substring(0, 2), 16),
       parseInt(color.substring(2, 4), 16),
-      parseInt(color.substring(4, 6), 16),
+      parseInt(color.substring(4, 6), 16)
    ]
 }
 
@@ -40,7 +40,7 @@ function getAsRgb(hexColor: string): number[] {
  */
 function getAsHex(number: number): string {
    const hex = number.toString(16)
-   return (hex.length === 1) ? '0' + hex : hex
+   return hex.length === 1 ? '0' + hex : hex
 }
 
 /** Used by the rain to color the characters inside. */
