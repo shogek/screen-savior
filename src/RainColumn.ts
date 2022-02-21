@@ -1,8 +1,8 @@
-import { SETTINGS } from './_settings'
-import { COLORS } from './colors'
-import { RAINDROP_STATES } from './RaindropStates'
-import { getRandomCharacter, getRandomNumber } from './helpers'
-import { Raindrop } from './Raindrop'
+import { SETTINGS } from './_settings.js'
+import { COLORS } from './colors.js'
+import { RAINDROP_STATES } from './RaindropStates.js'
+import { getRandomCharacter, getRandomNumber } from './helpers.js'
+import { Raindrop } from './Raindrop.js'
 
 /** I repesent a single vertical column in the matrix rain. */
 export class RainColumn {

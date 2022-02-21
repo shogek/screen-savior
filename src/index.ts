@@ -4,9 +4,9 @@
  * If renaming this file - also rename it in index.html!
  */
 
-import { SETTINGS } from './_settings'
-import { RainColumn } from './RainColumn'
-import { getRandomNumber } from './helpers'
+import { SETTINGS } from './_settings.js'
+import { RainColumn } from './RainColumn.js'
+import { getRandomNumber } from './helpers.js'
 
 function startApplication() {
    const canvas = document.getElementById('canvas') as HTMLCanvasElement

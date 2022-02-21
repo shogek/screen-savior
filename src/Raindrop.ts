@@ -1,4 +1,4 @@
-import { RAINDROP_STATES } from './RaindropStates'
+import { RAINDROP_STATES } from './RaindropStates.js'
 
 /** I represent a single character in a rain column. */
 export class Raindrop {
