@@ -1,8 +1,7 @@
 {
    "scripts": {
       "start": "http-server",
-      "build": "tsc",
-      "build:watch": "tsc --watch"
+      "build": "tsc"
    },
    "dependencies": {
       "typescript": "^4.5.5"
