@@ -1,4 +1,4 @@
-import { CHARACTERS } from './characters'
+import { CHARACTERS } from './characters.js'
 
 /**
  * Generate a random number between zero and provided max value.

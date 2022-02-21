@@ -1,4 +1,4 @@
-import { SETTINGS } from './_settings'
+import { SETTINGS } from './_settings.js'
 
 /**
  * Calculate a hex color in specific stop between two colors.
